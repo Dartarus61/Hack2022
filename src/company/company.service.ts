@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { FilesService } from 'src/fileLoader/fileLoader.service';
+import { EExtentionType, FilesService } from 'src/fileLoader/fileLoader.service';
 import { Company } from 'src/models/company.model';
 import { CreateCompanyDto } from './dto/createCompany.dto';
 import * as bcrypt from 'bcrypt'
@@ -36,9 +36,9 @@ export class CompanyService {
         return this.getNormObject(await this.companyModel.findByPk(id))
     }
 
-    async create(files: { logo: Express.Multer.File[], mainIcon: Express.Multer.File[] }, company: CreateCompanyDto)/* : Promise<ResponseCompanyDto> */{
-        const logoName = this.fileService.upload(files.logo[0])
-        const mainIconName = this.fileService.upload(files.mainIcon[0])
+    async create(files: { logo: Express.Multer.File[], mainIcon: Express.Multer.File[] }, company: CreateCompanyDto): Promise<ResponseCompanyDto>{
+        const logoName = this.fileService.upload(files.logo[0], EExtentionType.IMAGE)
+        const mainIconName = this.fileService.upload(files.mainIcon[0], EExtentionType.IMAGE)
         const hashPassword = await bcrypt.hash(company.password, 5)
         const newCompany = await this.companyModel.create({
             logo_dir: logoName,
@@ -58,11 +58,11 @@ export class CompanyService {
 
         if(files) {
             if (files.logo[0]){
-                logoName = this.fileService.update(files.logo[0], lastCompany.logo_dir)
+                logoName = this.fileService.update(files.logo[0], lastCompany.logo_dir, EExtentionType.IMAGE)
             }
 
             if (files.mainIcon[0]){
-                mainIconName = this.fileService.update(files.mainIcon[0], lastCompany.mainIcon_dir)
+                mainIconName = this.fileService.update(files.mainIcon[0], lastCompany.mainIcon_dir, EExtentionType.IMAGE)
             }
         }
 

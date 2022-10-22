@@ -1,9 +1,9 @@
-import { Published } from "enumConfig";
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { EPublished } from "./case.model";
 import { Company } from "./company.model";
 
 
-@Table({ tableName: 'Comments', timestamps:false, freezeTableName:true })
+@Table({ tableName: 'Comments', timestamps: false, freezeTableName: true })
 export class Comments extends Model<Comments> {
     @Column({
         type: DataType.INTEGER,
@@ -34,8 +34,8 @@ export class Comments extends Model<Comments> {
     @Column({ type: DataType.STRING, allowNull: false })
     picture_dir: string
 
-    @Column({ type: DataType.ENUM("Yes",'No','Denied'), allowNull: false })
-    published: Published
+    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false })
+    published: EPublished
 
     @ForeignKey(() => Company)
     @Column

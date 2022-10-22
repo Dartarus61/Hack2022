@@ -1,10 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config'
 import { SequelizeModule } from '@nestjs/sequelize'
-import { ServeStaticModule } from '@nestjs/serve-static'
-import * as path from 'path'
 import { AnotherEmail } from './models/anotherEmail.model';
 import { Case } from './models/case.model';
 import { Category } from './models/category.model';
@@ -19,36 +15,38 @@ import { Product } from './models/product.model';
 import { TagsProduct } from './models/productTags.model';
 import { CompanyModule } from './company/company.module';
 import { ProductModule } from './product/product.module';
+import { CaseModule } from './case/case.module';
 
 
 @Module({
   
-  controllers: [AppController],
-  providers: [AppService],
-  imports: [ConfigModule.forRoot({
-    envFilePath: `.env`,
-    isGlobal: true,
-
-}),
-    SequelizeModule.forRoot({
-    dialect: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: 'postgres',
-    password: 'postgres',
-    database: 'hack22',
-    models: [AnotherEmail,Case,Category,Comments,Company,TagsCompany,Locations,MetaTegs,Partners,PictureProduct,Product,TagsProduct],
-    autoLoadModels: true,
-    sync: { force: true },
-    /* dialectOptions:{
-        ssl:{
-            require: true,
-            rejectUnauthorized: false,
-        }
-    } */
-}),
-CompanyModule,
-ProductModule
-],
+  controllers: [],
+  providers: [],
+  imports: [
+        ConfigModule.forRoot({
+            envFilePath: `.env`,
+            isGlobal: true,
+        }),
+        SequelizeModule.forRoot({
+            dialect: 'postgres',
+            host: 'localhost',
+            port: 5432,
+            username: 'postgres',
+            password: 'postgres',
+            database: 'hack22',
+            models: [ AnotherEmail, Case, Category, Comments, Company, TagsCompany, Locations, MetaTegs, Partners, PictureProduct, Product, TagsProduct ],
+            autoLoadModels: true,
+            sync: { force: true },
+            /* dialectOptions:{
+                ssl:{
+                    require: true,
+                    rejectUnauthorized: false,
+                }
+            } */
+        }),
+        CompanyModule,
+        ProductModule,
+        CaseModule
+    ],
 })
 export class AppModule {}

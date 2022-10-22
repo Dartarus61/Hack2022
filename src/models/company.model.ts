@@ -6,7 +6,7 @@ import { Comments } from './comments.model'
 import { Locations } from './locations.model'
 import { Partners } from './partners.panel'
 
-@Table({ tableName: 'Company', timestamps:false, freezeTableName:true })
+@Table({ tableName: 'Company', timestamps: false, freezeTableName: true })
 export class Company extends Model<Company> {
     @Column({
         type: DataType.INTEGER,

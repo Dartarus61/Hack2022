@@ -1,7 +1,7 @@
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript'
 import { Company } from './company.model'
 
-@Table({ tableName: 'Locations', timestamps:false, freezeTableName:true })
+@Table({ tableName: 'Locations', timestamps: false, freezeTableName: true })
 export class Locations extends Model<Locations> {
     @Column({
         type: DataType.INTEGER,

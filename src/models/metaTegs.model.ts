@@ -3,7 +3,7 @@ import { TagsCompany } from './companyTags.model'
 import { TagsProduct } from './productTags.model'
 
 
-@Table({ tableName: 'MetaTegs' ,timestamps:false, freezeTableName:true })
+@Table({ tableName: 'MetaTegs', timestamps: false, freezeTableName: true })
 export class MetaTegs extends Model<MetaTegs> {
     @Column({
         type: DataType.INTEGER,

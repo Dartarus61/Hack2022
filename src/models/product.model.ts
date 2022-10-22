@@ -1,8 +1,33 @@
-import { deliveryMethod, paymentMethod, Published, typeBuy, typeProduct, TypeRelation } from 'enumConfig'
-import { BelongsTo, BelongsToMany, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
+import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
+import { EPublished } from './case.model'
 import { Category } from './category.model'
 import { PictureProduct } from './pictureProduct.model'
 import { TagsProduct } from './productTags.model'
+
+export enum ETypeProduct {
+    PRODUCT='PRODUCT',
+    SERVICE='SERVICE'
+}
+
+export enum ETypeBuy {
+    WHOLESALE='WHOLESALE',//опт
+    RETAIL='RETAIL',//розница
+    BOTH='BOTH'//оба
+}
+
+export enum EPaymentMethod {
+    CARD='CARD',
+    CASH='CASH',
+    BOTH='BOTH'
+}
+
+export enum EDeliveryMethod {
+    COURER='COURER',
+    FAST_DELIVERY='FAST_DELIVERY',
+    POSTMAT='POSTMAT',
+    PICKUP='PICKUP',
+    TRANSPORT_COMPANIES='TRANSPORT_COMPANIES',
+}
 
 @Table({ tableName: 'Product', timestamps:false, freezeTableName:true })
 export class Product extends Model<Product> {
@@ -17,8 +42,8 @@ export class Product extends Model<Product> {
     @Column({ type: DataType.STRING, allowNull: false })
     name: string
 
-    @Column({ type: DataType.ENUM('Product','Service'), allowNull: false })
-    type: typeProduct
+    @Column({ type: DataType.ENUM('PRODUCT','SERVICE'), allowNull: false })
+    type: ETypeProduct
     
     @Column({ type: DataType.STRING, allowNull: false })
     manifacture: string
@@ -35,17 +60,17 @@ export class Product extends Model<Product> {
     @Column({ type: DataType.STRING, allowNull: false })
     description: string
 
-    @Column({ type: DataType.ENUM('Wholesale','Retail','Both'), allowNull: false })
-    typeBuy: typeBuy
+    @Column({ type: DataType.ENUM('WHOLESALE','RETAIL','BOTH'), allowNull: false })
+    typeBuy: ETypeBuy
 
     @Column({ type: DataType.INTEGER, allowNull: false })
-    MinLot: number
+    minLot: number
 
-    @Column({ type: DataType.ENUM('Card','Cash','Both'), allowNull: false })
-    paymentMethod: paymentMethod
+    @Column({ type: DataType.ENUM('CARD','CASH','BOTH'), allowNull: false })
+    paymentMethod: EPaymentMethod
     
-    @Column({ type: DataType.ENUM('Courer','FastDelivery','Postamat','Pickup','Transport Companies'), allowNull: false })
-    deliveryMethod: deliveryMethod
+    @Column({ type: DataType.ENUM('COURER','FAST_DELIVERY','POSTMAT','PICKUP','TRANSPORT_COMPANIES'), allowNull: false })
+    deliveryMethod: EDeliveryMethod
 
     @Column({ type: DataType.STRING, allowNull: false })
     standart: string
@@ -53,11 +78,11 @@ export class Product extends Model<Product> {
     @Column({ type: DataType.STRING, allowNull: false })
     analogs: string
 
-    @Column({ type: DataType.ENUM("Yes",'No','Denied'), allowNull: false })
-    published: Published
+    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false })
+    published: EPublished
 
     @Column({ type: DataType.DATE, allowNull: false })
-    date: string
+    date: Date
 
     @Column({ type: DataType.BOOLEAN, allowNull: false })
     importozamest: boolean

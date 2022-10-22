@@ -1,9 +1,15 @@
-import { Published, TypeRelation } from 'enumConfig'
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript'
+import { EPublished } from './case.model'
 import { Company } from './company.model'
 import { Product } from './product.model'
 
-@Table({ tableName: 'Category', timestamps:false, freezeTableName:true })
+export enum ETypeRelation {
+    MOTHER='MOTHER',
+    DOUGHTER='DOUGHTER'
+}
+
+
+@Table({ tableName: 'Category', timestamps: false, freezeTableName: true })
 export class Category extends Model<Category> {
     @Column({
         type: DataType.INTEGER,
@@ -19,11 +25,11 @@ export class Category extends Model<Category> {
     @Column({ type: DataType.INTEGER, allowNull: true })
     BornFrom: number
 
-    @Column({ type: DataType.ENUM("Yes",'No','Denied'), allowNull: false })
-    published: Published
+    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false })
+    published: EPublished
 
-    @Column({ type: DataType.ENUM('Mother','Doughter'), allowNull: false })
-    type: TypeRelation 
+    @Column({ type: DataType.ENUM('MOTHER','DOUGHTER'), allowNull: false })
+    type: ETypeRelation 
 
     @Column({ type: DataType.DATE, allowNull: false })
     date: string
