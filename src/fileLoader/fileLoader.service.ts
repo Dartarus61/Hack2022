@@ -67,4 +67,14 @@ export class FilesService {
         }
     }
 
+    deleteFile(filename:string,extanrionPath: EExtentionType) {
+        try {
+            let filePath = path.resolve(__dirname, '../../../', 'assets', extanrionPath,filename)
+            fs.unlinkSync(filePath)
+        } catch (error) {
+            console.error(error);
+            
+        }
+    }
+
 }

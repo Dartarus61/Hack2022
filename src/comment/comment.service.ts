@@ -59,7 +59,7 @@ export class CommentService {
         ){
             throw new HttpException("Can't delete", HttpStatus.BAD_REQUEST)
         }
-
+        this.fileService.deleteFile(lastComment.picture_dir,EExtentionType.IMAGE)
         return lastComment
 
     }

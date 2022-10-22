@@ -18,8 +18,8 @@ export class PictureProduct extends Model<PictureProduct> {
 
     @ForeignKey(() => Product)
     @Column
-    categoryId: number
+    productId: number
 
     @BelongsTo(() => Product)
-    category: Product
+    product: Product
 }

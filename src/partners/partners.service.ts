@@ -57,7 +57,7 @@ export class PartnerService {
         await this.partnerModel.destroy({
             where: {id}
         })
-
+        this.fileService.deleteFile(lastPartner.logo_dir,EExtentionType.IMAGE)
         return lastPartner
         
     }

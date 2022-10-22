@@ -87,7 +87,7 @@ export class ProductService {
     }
     async delete(id: number) {
         const product = await this.productModel.findByPk(id)
-
+        
         if(!product) {
             throw new HttpException("Company not fount", HttpStatus.NOT_FOUND)
         }
@@ -99,7 +99,12 @@ export class ProductService {
         ){
             throw new HttpException("Can't delete", HttpStatus.BAD_REQUEST)
         }
-
+        this.fileService.deleteFile(product.video_dir,EExtentionType.VIDEO)
+        const allpicture = await this.pictureProductModel.findAll({where:{productId:id}})
+        for (let i = 0; i < allpicture.length; i++) {
+            this.fileService.deleteFile(allpicture[i].name,EExtentionType.IMAGE)
+            await allpicture[i].destroy()
+        }
         return product
     }
 }

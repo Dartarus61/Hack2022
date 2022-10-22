@@ -110,6 +110,8 @@ export class CompanyService {
             throw new HttpException("Can't delete", HttpStatus.BAD_REQUEST)
         }
 
+        this.fileService.deleteFile(lastCompany.logo_dir,EExtentionType.IMAGE)
+        this.fileService.deleteFile(lastCompany.mainIcon_dir,EExtentionType.IMAGE)
         return this.getNormObject(lastCompany)
 
     }

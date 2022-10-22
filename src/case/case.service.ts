@@ -84,7 +84,7 @@ export class CaseService {
         ){
             throw new HttpException("Can't delete", HttpStatus.BAD_REQUEST)
         }
-
+        this.fileService.deleteFile(lastCase.video_dir,EExtentionType.VIDEO)
         return lastCase
 
     }

@@ -12,10 +12,6 @@ export class CaseController {
       return this.caseService.getAll()
     }
   
-    @Get("/image/:id")
-    getImage(@Param('id') id: number, @Res() res) {
-  
-    }
   
     @Get("/:id")
     getOne(@Param('id') id: number) {

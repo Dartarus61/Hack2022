@@ -18,10 +18,6 @@ export class CompanyController {
     return this.companyService.addEmail(dto)
   }
 
-  @Get("/image/:id")
-  getImage(@Param('id') id: number, @Res() res) {
-
-  }
 
   @Get("/:id")
   getOne(@Param('id') id: number) {
