@@ -3,7 +3,7 @@ import { EPublished } from './case.model'
 import { Company } from './company.model'
 
 @Table({ tableName: 'Partners', timestamps: false, freezeTableName: true })
-export class Partners extends Model<Partners> {
+export class Partner extends Model<Partner> {
     @Column({
         type: DataType.INTEGER,
         unique: true,

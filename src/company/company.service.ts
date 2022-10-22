@@ -5,12 +5,16 @@ import { Company } from 'src/models/company.model';
 import { CreateCompanyDto } from './dto/createCompany.dto';
 import * as bcrypt from 'bcrypt'
 import { ResponseCompanyDto } from './dto/responsCompany.dto';
+import { AddEmailDto } from './dto/addemail.dto';
+import { AnotherEmail } from 'src/models/anotherEmail.model';
 
 @Injectable()
 export class CompanyService {
     constructor(
         @InjectModel(Company)
         private readonly companyModel: typeof Company,
+
+        @InjectModel(AnotherEmail) private readonly anotherEmailModel:typeof AnotherEmail,
 
         private readonly fileService: FilesService
     ){}
@@ -23,7 +27,7 @@ export class CompanyService {
     }
 
     async getAll(): Promise<Company[]> {
-        let companies =await this.companyModel.findAll()
+        let companies =await this.companyModel.findAll({include:{all:true}})
         let newCompanies= companies.map(el=>{
             return this.getNormObject(el)
         })
@@ -33,7 +37,17 @@ export class CompanyService {
     }
 
     async getOne(id: number): Promise<Company> {
-        return this.getNormObject(await this.companyModel.findByPk(id))
+        return this.getNormObject(await this.companyModel.findByPk(id,{include:{all:true}}))
+    }
+
+    async addEmail(dto:AddEmailDto) {
+        const Company = await this.companyModel.findByPk(dto.companyId)
+        if (Company) {
+            const newEmail = await this.anotherEmailModel.create({email:dto.newEmail})
+            Company.$add('anotherEmail',newEmail)
+            return newEmail
+        }
+        throw new HttpException('Компания не найдена',HttpStatus.NOT_FOUND)
     }
 
     async create(files: { logo: Express.Multer.File[], mainIcon: Express.Multer.File[] }, company: CreateCompanyDto): Promise<ResponseCompanyDto>{

@@ -17,9 +17,10 @@ export class ProductService {
     ){}
 
     async create(dto: CreateProductDto,files: { video: Express.Multer.File[], picture: Array<Express.Multer.File> }) {
-        const video = this.fileService.upload(files.video[0], EExtentionType.VIDEO)
-        const picture = await this.createFiles(this.fileService.uploadMany(files.picture, EExtentionType.IMAGE))
+        
         if (Object.values(ETypeBuy).includes(dto.typeBuy) && Object.values(EPaymentMethod).includes(dto.paymentMethod) && Object.values(EDeliveryMethod).includes(dto.deliveryMethod) && Object.values(EPublished).includes(dto.published)) {
+            const video = this.fileService.upload(files.video[0], EExtentionType.VIDEO)
+            const picture = await this.createFiles(this.fileService.uploadMany(files.picture, EExtentionType.IMAGE))
             const product= await this.productModel.create({video_dir: video, ...dto, date: new Date(), price: Number(dto.price), minLot: Number(dto.minLot), importozamest: Boolean(dto.importozamest), visible: Boolean(dto.visible)})
             product.$add('pictureProduct',picture)
             return product
@@ -37,15 +38,15 @@ export class ProductService {
         return ArrOfObjectByFiles
     }
 
-    /* async updateFiles(FilesArr:string[],MainObject:Product){
+    async updateFiles(FilesArr:string[],MainObject:Product){
         const ArrOfObjectByFiles:PictureProduct[]=[]
         let file:PictureProduct
         for (let i = 0; i < FilesArr.length; i++) {
-            await MainObject.update({dirname:FilesArr[0],name:FilesArr[i]})
+            file = await this.pictureProductModel.create({dirname:FilesArr[0],name:FilesArr[i]})
             ArrOfObjectByFiles.push(file)
         }
         return ArrOfObjectByFiles
-    } */
+    }
     
     async getOne(id: number) {
         const product=await this.productModel.findByPk(id,{include:{all:true}})
@@ -57,6 +58,11 @@ export class ProductService {
     }
     async update(id: number, dto: CreateProductDto,files: { video: Express.Multer.File[], picture: Express.Multer.File[] }) {
         const lastProduct = await this.productModel.findByPk(id,{include:{all:true}})
+        console.log(lastProduct);
+        
+        for (let i = 0; i < lastProduct.pictureProduct.length; i++) {
+            await lastProduct.pictureProduct[i].destroy()
+        }
         let video: string | null = null
         let pictures: string[] | null = null
         let onePicture: string | null = null
@@ -68,18 +74,16 @@ export class ProductService {
             }
 
             if (files.picture){
-                 /* this.fileService.update(files.picture, lastProduct.mainIcon_dir) */
                  for (let i = 0; i < files.picture.length; i++) {
                     onePicture= this.fileService.update(files.picture[i], lastProduct.pictureProduct[i].name, EExtentionType.IMAGE)
                     pictures.push(onePicture)
                  }
-                 //this.updateFiles(pictures,lastProduct)
+                 let newPictures = await this.updateFiles(pictures,lastProduct)
+                 await lastProduct.$add('pictureProduct',newPictures)
+                
             }
         }
-
-        
-
-
+        return lastProduct
     }
     async delete(id: number) {
         const product = await this.productModel.findByPk(id)

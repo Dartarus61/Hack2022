@@ -30,10 +30,10 @@ export class FilesService {
 
     update(file: Express.Multer.File, lastFile: string, extanrionPath: EExtentionType){
         try{
-            if(fs.existsSync(path.resolve(__dirname, '../../', 'assets', extanrionPath, lastFile))) {
-                fs.unlinkSync(path.resolve(__dirname, '../../', 'assets', extanrionPath,  lastFile))
+            if(fs.existsSync(path.resolve(__dirname, '../../../', 'assets', extanrionPath, lastFile))) {
+                fs.unlinkSync(path.resolve(__dirname, '../../../', 'assets', extanrionPath,  lastFile))
             }
-            let filePath = path.resolve(__dirname, '../../', 'assets', extanrionPath)
+            let filePath = path.resolve(__dirname, '../../../', 'assets', extanrionPath)
             let fileName = uuid.v4() + file.originalname
             fs.writeFileSync(path.join(filePath, fileName), file.buffer)
             return fileName

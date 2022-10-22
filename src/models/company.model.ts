@@ -2,9 +2,9 @@ import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript'
 import { AnotherEmail } from './anotherEmail.model'
 import { Case } from './case.model'
 import { Category } from './category.model'
-import { Comments } from './comments.model'
-import { Locations } from './locations.model'
-import { Partners } from './partners.panel'
+import { Comments } from './comment.model'
+import { Location } from './location.model'
+import { Partner } from './partner.model'
 
 @Table({ tableName: 'Company', timestamps: false, freezeTableName: true })
 export class Company extends Model<Company> {
@@ -67,8 +67,8 @@ export class Company extends Model<Company> {
     @Column({ type: DataType.STRING, allowNull: false })
     phoneNumber: string
 
-    @HasMany(() => Partners)
-    partners: Partners[]
+    @HasMany(() => Partner)
+    partners: Partner[]
 
     @HasMany(() => AnotherEmail)
     anotherEmail: AnotherEmail[]
@@ -76,8 +76,8 @@ export class Company extends Model<Company> {
     @HasMany(() => Comments)
     comment: Comments[]
 
-    @HasMany(() => Locations)
-    locations: Locations[]
+    @HasMany(() => Location)
+    locations: Location[]
 
     @HasMany(() => Category)
     category: Category[]

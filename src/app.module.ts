@@ -4,18 +4,22 @@ import { SequelizeModule } from '@nestjs/sequelize'
 import { AnotherEmail } from './models/anotherEmail.model';
 import { Case } from './models/case.model';
 import { Category } from './models/category.model';
-import { Comments } from './models/comments.model';
+import { Comments } from './models/comment.model';
 import { Company } from './models/company.model';
 import { TagsCompany } from './models/companyTags.model';
-import { Locations } from './models/locations.model';
+import { Location } from './models/location.model';
 import { MetaTegs } from './models/metaTegs.model';
-import { Partners } from './models/partners.panel';
+import { Partner} from './models/partner.model';
 import { PictureProduct } from './models/pictureProduct.model';
 import { Product } from './models/product.model';
 import { TagsProduct } from './models/productTags.model';
-import { CompanyModule } from './company/company.module';
+
 import { ProductModule } from './product/product.module';
 import { CaseModule } from './case/case.module';
+import { LocationModule } from './location/location.module';
+import { CommentModule } from './comment/comment.module';
+import { CompanyModule } from './company/company.module';
+import { MetatagsModule } from './metatags/metatags.module';
 
 
 @Module({
@@ -34,9 +38,9 @@ import { CaseModule } from './case/case.module';
             username: 'postgres',
             password: 'postgres',
             database: 'hack22',
-            models: [ AnotherEmail, Case, Category, Comments, Company, TagsCompany, Locations, MetaTegs, Partners, PictureProduct, Product, TagsProduct ],
+            models: [ AnotherEmail, Case, Category, Comments, Company, TagsCompany, Location, MetaTegs, Partner, PictureProduct, Product, TagsProduct ],
             autoLoadModels: true,
-            sync: { force: true },
+            /* sync: { alter: true }, */
             /* dialectOptions:{
                 ssl:{
                     require: true,
@@ -46,7 +50,10 @@ import { CaseModule } from './case/case.module';
         }),
         CompanyModule,
         ProductModule,
-        CaseModule
+        CaseModule,
+        LocationModule,
+        CommentModule,
+        MetatagsModule
     ],
 })
 export class AppModule {}

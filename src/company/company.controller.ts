@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Res, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
 import { CompanyService } from "./company.service";
+import { AddEmailDto } from "./dto/addemail.dto";
 import { CreateCompanyDto } from "./dto/createCompany.dto";
 
 @Controller("/company")
@@ -10,6 +11,11 @@ export class CompanyController {
   @Get()
   getAll() {
     return this.companyService.getAll()
+  }
+
+  @Post('/addemail')
+  addEmail(@Body()dto :AddEmailDto) {
+    return this.companyService.addEmail(dto)
   }
 
   @Get("/image/:id")

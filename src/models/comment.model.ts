@@ -13,6 +13,9 @@ export class Comments extends Model<Comments> {
     })
     id: number
 
+    @Column({type:DataType.DATE,allowNull:true})
+    dateOfCreate:Date
+
     @Column({ type: DataType.STRING, allowNull: false })
     message: string
 
@@ -28,8 +31,8 @@ export class Comments extends Model<Comments> {
     @Column({ type: DataType.STRING, allowNull: false })
     lastName: string
 
-    @Column({ type: DataType.DATE, allowNull: false })
-    dateOfPublished: string
+    @Column({ type: DataType.DATE, allowNull: true })
+    dateOfPublished: Date
 
     @Column({ type: DataType.STRING, allowNull: false })
     picture_dir: string

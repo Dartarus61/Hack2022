@@ -2,7 +2,7 @@ import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize
 import { Company } from './company.model'
 
 @Table({ tableName: 'Locations', timestamps: false, freezeTableName: true })
-export class Locations extends Model<Locations> {
+export class Location extends Model<Location> {
     @Column({
         type: DataType.INTEGER,
         unique: true,

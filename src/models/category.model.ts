@@ -19,11 +19,11 @@ export class Category extends Model<Category> {
     })
     id: number
 
-    @Column({ type: DataType.STRING, allowNull: false })
+    @Column({ type: DataType.STRING, allowNull: false,unique: true })
     name: string
 
     @Column({ type: DataType.INTEGER, allowNull: true })
-    BornFrom: number
+    bornFrom: number
 
     @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false })
     published: EPublished
@@ -32,7 +32,7 @@ export class Category extends Model<Category> {
     type: ETypeRelation 
 
     @Column({ type: DataType.DATE, allowNull: false })
-    date: string
+    date: Date
 
     @ForeignKey(() => Company)
     @Column
