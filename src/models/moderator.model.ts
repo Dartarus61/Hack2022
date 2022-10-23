@@ -8,8 +8,8 @@ export enum ECrudOperation {
     DELETE='DELETE'
 }
 
-@Table({ tableName: 'TagsProduct', timestamps:false, freezeTableName:true })
-export class Publication extends Model<Publication> {
+@Table({ tableName: 'Moderator', timestamps:false, freezeTableName:true })
+export class Moderator extends Model<Moderator> {
     @Column({
         type: DataType.INTEGER,
         unique: true,
@@ -18,10 +18,7 @@ export class Publication extends Model<Publication> {
     })
     id: number
 
-    @Column({ type: DataType.NUMBER, allowNull: true })
-    baseLineId:number
-
-    @Column({type:DataType.ENUM('CREATE','READ','UPDATE','DELETE'),allowNull:false})
+    @Column({type:DataType.ENUM('CREATE','READ','UPDATE','DELETE'),allowNull:false,defaultValue:'CREATE'})
     type_Crud:ECrudOperation
 
     @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false,defaultValue:'NO' })
@@ -37,5 +34,5 @@ export class Publication extends Model<Publication> {
     entity_name:string
 
     @Column({ type: DataType.JSON, allowNull: false })
-    data:Object
+    data: any
 }

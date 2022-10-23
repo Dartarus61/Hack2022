@@ -3,7 +3,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import { getNormObject } from "src/company/company.service";
 import { EPublished } from "src/models/case.model";
 import { Category } from "src/models/category.model";
-import { ECrudOperation } from "src/models/publications.model";
+import { ECrudOperation } from "src/models/moderator.model";
 import { ModeratorService } from "src/moderator/moderator.service";
 import { CategoryDto } from "./dto/category.dto";
 
@@ -37,7 +37,7 @@ export class CategoryService{
         const newCategory = await this.categoryModal.create({...category})
         let sendJSON=getNormObject(newCategory)
         delete sendJSON.id
-        const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'category',newCategory.id)
+        const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'category')
         console.log(moderatable);
 
         return 

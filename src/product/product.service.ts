@@ -5,7 +5,7 @@ import { EExtentionType, FilesService } from 'src/fileLoader/fileLoader.service'
 import { EPublished } from 'src/models/case.model';
 import { PictureProduct } from 'src/models/pictureProduct.model';
 import { EDeliveryMethod, EPaymentMethod, ETypeBuy, Product } from 'src/models/product.model';
-import { ECrudOperation } from 'src/models/publications.model';
+import { ECrudOperation } from 'src/models/moderator.model';
 import { ModeratorService } from 'src/moderator/moderator.service';
 import { CreateProductDto } from './dto/CreateProduct.dto';
 
@@ -33,7 +33,7 @@ export class ProductService {
             let sendJSON=getNormObject(product)
         delete sendJSON.id
         
-        const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'company',product.id)
+        const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'company')
         console.log(moderatable);
             return product
         } 

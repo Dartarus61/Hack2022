@@ -25,6 +25,7 @@ import { ModeratorModule } from './moderator/moderator.module';
 import { MailModule } from './mail/mail.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
+import { Moderator } from './models/moderator.model';
 
 @Module({
   
@@ -55,7 +56,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
             username: 'postgres',
             password: 'postgres',
             database: 'hack22',
-            models: [ AnotherEmail, Case, Category, Comments, Company, TagsCompany, Location, MetaTegs, Partner, PictureProduct, Product, TagsProduct ],
+            models: [ AnotherEmail, Case, Category, Comments, Company, TagsCompany, Location, MetaTegs, Partner, PictureProduct, Product, TagsProduct, Moderator ],
             autoLoadModels: true,
              sync: { force: true }, 
             /* dialectOptions:{

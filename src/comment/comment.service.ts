@@ -5,7 +5,7 @@ import { EExtentionType, FilesService } from 'src/fileLoader/fileLoader.service'
 import { EPublished } from 'src/models/case.model';
 import { Comments } from 'src/models/comment.model';
 import { Company } from 'src/models/company.model';
-import { ECrudOperation } from 'src/models/publications.model';
+import { ECrudOperation } from 'src/models/moderator.model';
 import { ModeratorService } from 'src/moderator/moderator.service';
 import { CreateCommentDto } from './dto/CreateCommentDto';
 
@@ -34,7 +34,7 @@ export class CommentService {
         let sendJSON=getNormObject(NewComment)
         delete sendJSON.id
         
-        const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'company',NewComment.id)
+        const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'company')
         console.log(moderatable);
 
 
@@ -45,6 +45,8 @@ export class CommentService {
     }
 
     async update(id: number, dto: CreateCommentDto, file?: Express.Multer.File) {
+        console.log(111111);
+        
         const comment = await this.commentModel.findByPk(id)
         if (comment) {
             if (file){
@@ -57,6 +59,7 @@ export class CommentService {
 
         }
     }
+    
     async delete(id: number) {
         const lastComment = await this.commentModel.findByPk(id)
 

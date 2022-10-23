@@ -9,7 +9,7 @@ import { AddEmailDto } from './dto/addemail.dto';
 import { AnotherEmail } from 'src/models/anotherEmail.model';
 import { EPublished } from 'src/models/case.model';
 import { ModeratorService } from 'src/moderator/moderator.service';
-import { ECrudOperation } from 'src/models/publications.model';
+import { ECrudOperation } from 'src/models/moderator.model';
 
 @Injectable()
 export class CompanyService {
@@ -74,9 +74,7 @@ export class CompanyService {
         let sendJSON=getNormObject(newCompany)
         console.log(sendJSON);
         
-        delete sendJSON.id
-        
-        const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'company',newCompany.id)
+        const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'company')
         console.log(moderatable);
         
         return getNormObject(newCompany)
@@ -134,6 +132,8 @@ export class CompanyService {
     }
 
     async updateStatus(id: number,status:EPublished) {
+        console.log(11111);
+        
         const company= await this.companyModel.findByPk(id) 
         const newcompany = await company.update({published:status})
         return newcompany
