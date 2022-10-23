@@ -57,6 +57,8 @@ export class CompanyService {
     }
 
     async create(files: { logo: Express.Multer.File[], mainIcon: Express.Multer.File[] }, company: CreateCompanyDto): Promise<ResponseCompanyDto>{
+        console.log(1234);
+        
         const logoName = this.fileService.upload(files.logo[0], EExtentionType.IMAGE)
         const mainIconName = this.fileService.upload(files.mainIcon[0], EExtentionType.IMAGE)
         const hashPassword = await bcrypt.hash(company.password, 5)
@@ -70,6 +72,8 @@ export class CompanyService {
         })
 
         let sendJSON=getNormObject(newCompany)
+        console.log(sendJSON);
+        
         delete sendJSON.id
         
         const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'company',newCompany.id)

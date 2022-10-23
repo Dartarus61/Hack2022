@@ -37,5 +37,5 @@ export class Publication extends Model<Publication> {
     entity_name:string
 
     @Column({ type: DataType.JSON, allowNull: false })
-    data:JSON
+    data:Object
 }

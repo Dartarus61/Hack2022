@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { EPublished } from 'src/models/case.model';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/CreateCommentDto';
 
@@ -32,4 +33,9 @@ export class CommentController {
     delete(@Param('id') id: number) {
         return  this.commentService.delete(id)
     }
+
+    @Post('/upstat/:id')
+    updateStat(@Param('id')id:number,@Body('status')status:EPublished) {
+    return this.commentService.updateStatus(id,status)
+  }
 }

@@ -14,7 +14,7 @@ export class FilesService {
     upload(file: Express.Multer.File, extanrionPath: EExtentionType){
         try{
             
-            let filePath = path.resolve(__dirname, '../../../', 'assets', extanrionPath)
+            let filePath = path.resolve(__dirname, '../../', 'assets', extanrionPath)
             
             let fileName = uuid.v4() + file.originalname
             

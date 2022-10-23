@@ -1,15 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { getNormObject } from 'src/company/company.service';
 import { EExtentionType, FilesService } from 'src/fileLoader/fileLoader.service';
 import { EPublished } from 'src/models/case.model';
 import { Comments } from 'src/models/comment.model';
 import { Company } from 'src/models/company.model';
+import { ECrudOperation } from 'src/models/publications.model';
+import { ModeratorService } from 'src/moderator/moderator.service';
 import { CreateCommentDto } from './dto/CreateCommentDto';
 
 @Injectable()
 export class CommentService {
     constructor(@InjectModel(Comments)private commentModel:typeof Comments, @InjectModel(Company)private CompanyModel:typeof Company,
-    private readonly fileService: FilesService){}
+    private readonly fileService: FilesService,
+    private readonly moderatorService:ModeratorService){}
 
     async getAll() {
         const allComments = await this.commentModel.findAll({include:{all:true}})
@@ -26,6 +30,14 @@ export class CommentService {
         const picture = this.fileService.upload(file,EExtentionType.IMAGE)
         const NewComment = await this.commentModel.create({...dto,picture_dir:picture,grade:Number(dto.grade)})
         Company.$add('comment',NewComment)
+
+        let sendJSON=getNormObject(NewComment)
+        delete sendJSON.id
+        
+        const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'company',NewComment.id)
+        console.log(moderatable);
+
+
         return NewComment
         }
         throw new HttpException('Не содержит нужный enum',HttpStatus.BAD_REQUEST)
@@ -62,5 +74,11 @@ export class CommentService {
         this.fileService.deleteFile(lastComment.picture_dir,EExtentionType.IMAGE)
         return lastComment
 
+    }
+
+    async updateStatus(id: number,status:EPublished) {
+        const comment= await this.commentModel.findByPk(id) 
+        const newComment = await comment.update({published:status})
+        return newComment
     }
 }

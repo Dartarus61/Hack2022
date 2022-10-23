@@ -101,5 +101,5 @@ export class Product extends Model<Product> {
     pictureProduct: PictureProduct[]
 
     @HasMany(() => TagsProduct)
-    cases: TagsProduct[]
+    tagsProduct: TagsProduct[]
 }

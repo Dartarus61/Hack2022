@@ -22,13 +22,28 @@ import { CompanyModule } from './company/company.module';
 import { MetatagsModule } from './metatags/metatags.module';
 import { SendfileModule } from './sendfile/sendfile.module';
 import { ModeratorModule } from './moderator/moderator.module';
-
+import { MailModule } from './mail/mail.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter'
 
 @Module({
   
   controllers: [],
   providers: [],
   imports: [
+        MailerModule.forRoot({
+            transport: 'smtps://project.oop@mail.ru:PFw6RrKEef2J8jkWdfHs@smtp.mail.ru',
+            defaults: {
+                from: '"no reply" <project.oop@mail.ru>',
+            },
+            template: {
+                dir: __dirname + '/templates',
+                adapter: new EjsAdapter(),
+                options: {
+                    strict: true,
+                },
+            },
+        }),
         ConfigModule.forRoot({
             envFilePath: `.env`,
             isGlobal: true,
@@ -42,7 +57,7 @@ import { ModeratorModule } from './moderator/moderator.module';
             database: 'hack22',
             models: [ AnotherEmail, Case, Category, Comments, Company, TagsCompany, Location, MetaTegs, Partner, PictureProduct, Product, TagsProduct ],
             autoLoadModels: true,
-            /* sync: { alter: true }, */
+             sync: { force: true }, 
             /* dialectOptions:{
                 ssl:{
                     require: true,
@@ -57,7 +72,8 @@ import { ModeratorModule } from './moderator/moderator.module';
         CommentModule,
         MetatagsModule,
         SendfileModule,
-        ModeratorModule
+        ModeratorModule,
+        MailModule
     ],
 })
 export class AppModule {}
