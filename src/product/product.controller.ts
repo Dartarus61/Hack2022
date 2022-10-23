@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { EPublished } from 'src/models/case.model';
 import { CreateProductDto } from './dto/CreateProduct.dto';
 import { ProductService } from './product.service';
 
@@ -39,4 +40,9 @@ export class ProductController {
     delete(@Param('id') id: number) {
         return  this.productService.delete(id)
     }
+
+    @Post('/upstat/:id')
+    updateStat(@Param('id')id:number,@Body('status')status:EPublished) {
+    return this.productService.updateStatus(id,status)
+  }
 }

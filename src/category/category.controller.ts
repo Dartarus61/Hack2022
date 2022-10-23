@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { EPublished } from "src/models/case.model";
 import { CategoryService } from "./category.service";
 import { CategoryDto } from "./dto/category.dto";
 
@@ -33,4 +34,9 @@ export class CategoryController {
     delete(@Param("id") id: number) {
         return this.categotyService.delete(id)
     }
+
+    @Post('/upstat/:id')
+    updateStat(@Param('id')id:number,@Body('status')status:EPublished) {
+    return this.categotyService.updateStatus(id,status)
+  }
 }

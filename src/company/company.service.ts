@@ -7,29 +7,35 @@ import * as bcrypt from 'bcrypt'
 import { ResponseCompanyDto } from './dto/responsCompany.dto';
 import { AddEmailDto } from './dto/addemail.dto';
 import { AnotherEmail } from 'src/models/anotherEmail.model';
+import { EPublished } from 'src/models/case.model';
+import { ModeratorService } from 'src/moderator/moderator.service';
+import { ECrudOperation } from 'src/models/publications.model';
 
 @Injectable()
 export class CompanyService {
+    
     constructor(
         @InjectModel(Company)
         private readonly companyModel: typeof Company,
 
         @InjectModel(AnotherEmail) private readonly anotherEmailModel:typeof AnotherEmail,
 
-        private readonly fileService: FilesService
+        private readonly fileService: FilesService,
+
+        private readonly moderatorService:ModeratorService
     ){}
 
-    getNormObject(body:Company) {
+    /* getNormObject(body:Company) {
         let temp=JSON.stringify(body, null, 2)
         const cmp=JSON.parse(temp)
         delete cmp.password
         return cmp
-    }
+    } */
 
     async getAll(): Promise<Company[]> {
         let companies =await this.companyModel.findAll({include:{all:true}})
         let newCompanies= companies.map(el=>{
-            return this.getNormObject(el)
+            return getNormObject(el)
         })
 
         return newCompanies
@@ -37,7 +43,7 @@ export class CompanyService {
     }
 
     async getOne(id: number): Promise<Company> {
-        return this.getNormObject(await this.companyModel.findByPk(id,{include:{all:true}}))
+        return getNormObject(await this.companyModel.findByPk(id,{include:{all:true}}))
     }
 
     async addEmail(dto:AddEmailDto) {
@@ -62,7 +68,14 @@ export class CompanyService {
             import_substitution: Boolean(company.import_substitution),
             password:hashPassword
         })
-        return this.getNormObject(newCompany)
+
+        let sendJSON=getNormObject(newCompany)
+        delete sendJSON.id
+        
+        const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'company',newCompany.id)
+        console.log(moderatable);
+        
+        return getNormObject(newCompany)
     }
 
     async update(id: number, company: CreateCompanyDto, files?: { logo?: Express.Multer.File[], mainIcon?: Express.Multer.File[] }) {
@@ -92,7 +105,7 @@ export class CompanyService {
             import_substitution: Boolean(company.import_substitution)
         })
 
-        return this.getNormObject(newCompany)
+        return getNormObject(newCompany)
     }
 
     async delete(id: number) {
@@ -112,7 +125,20 @@ export class CompanyService {
 
         this.fileService.deleteFile(lastCompany.logo_dir,EExtentionType.IMAGE)
         this.fileService.deleteFile(lastCompany.mainIcon_dir,EExtentionType.IMAGE)
-        return this.getNormObject(lastCompany)
+        return getNormObject(lastCompany)
 
     }
+
+    async updateStatus(id: number,status:EPublished) {
+        const company= await this.companyModel.findByPk(id) 
+        const newcompany = await company.update({published:status})
+        return newcompany
+    }
+}
+
+export function getNormObject(body) {
+    let temp=JSON.stringify(body, null, 2)
+    const cmp=JSON.parse(temp)
+    delete cmp.password
+    return cmp
 }

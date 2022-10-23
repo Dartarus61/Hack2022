@@ -78,7 +78,7 @@ export class Product extends Model<Product> {
     @Column({ type: DataType.STRING, allowNull: false })
     analogs: string
 
-    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false })
+    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false,defaultValue:'NO' })
     published: EPublished
 
     @Column({ type: DataType.DATE, allowNull: false })

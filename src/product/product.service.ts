@@ -1,9 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { getNormObject } from 'src/company/company.service';
 import { EExtentionType, FilesService } from 'src/fileLoader/fileLoader.service';
 import { EPublished } from 'src/models/case.model';
 import { PictureProduct } from 'src/models/pictureProduct.model';
 import { EDeliveryMethod, EPaymentMethod, ETypeBuy, Product } from 'src/models/product.model';
+import { ECrudOperation } from 'src/models/publications.model';
+import { ModeratorService } from 'src/moderator/moderator.service';
 import { CreateProductDto } from './dto/CreateProduct.dto';
 
 @Injectable()
@@ -13,7 +16,10 @@ export class ProductService {
         private readonly productModel: typeof Product,
 
         private readonly fileService: FilesService,
-        @InjectModel(PictureProduct) private readonly pictureProductModel: typeof PictureProduct
+
+        @InjectModel(PictureProduct) private readonly pictureProductModel: typeof PictureProduct,
+
+        private readonly moderatorService:ModeratorService
     ){}
 
     async create(dto: CreateProductDto,files: { video: Express.Multer.File[], picture: Array<Express.Multer.File> }) {
@@ -23,6 +29,12 @@ export class ProductService {
             const picture = await this.createFiles(this.fileService.uploadMany(files.picture, EExtentionType.IMAGE))
             const product= await this.productModel.create({video_dir: video, ...dto, date: new Date(), price: Number(dto.price), minLot: Number(dto.minLot), importozamest: Boolean(dto.importozamest), visible: Boolean(dto.visible)})
             product.$add('pictureProduct',picture)
+
+            let sendJSON=getNormObject(product)
+        delete sendJSON.id
+        
+        const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'company',product.id)
+        console.log(moderatable);
             return product
         } 
         throw new HttpException('Не соответствие параметрам',HttpStatus.BAD_REQUEST)
@@ -106,5 +118,11 @@ export class ProductService {
             await allpicture[i].destroy()
         }
         return product
+    }
+
+    async updateStatus(id: number,status:EPublished) {
+        const product= await this.productModel.findByPk(id) 
+        const newProduct = await product.update({published:status})
+        return newProduct
     }
 }

@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Res, UploadedFiles, UseInterceptors } from "@nestjs/common";
 import { FileFieldsInterceptor } from "@nestjs/platform-express";
+import { EPublished } from "src/models/case.model";
 import { CompanyService } from "./company.service";
 import { AddEmailDto } from "./dto/addemail.dto";
 import { CreateCompanyDto } from "./dto/createCompany.dto";
@@ -38,12 +39,17 @@ export class CompanyController {
     { name: 'logo', maxCount: 1 },
     { name: 'mainIcon', maxCount: 1 },
   ]))
-  update( @Param('id') id: number, @Body() company: CreateCompanyDto, @UploadedFiles() files?: { logotip?: Express.Multer.File[], main_page?: Express.Multer.File[] }) {
+  update( @Param('id') id: number, @Body() company: CreateCompanyDto, @UploadedFiles() files?: { logo?: Express.Multer.File[], mainIcon?: Express.Multer.File[] }) {
     return  this.companyService.update(id, company)
   }
 
   @Delete("/delete/:id")
   delete(@Param('id') id: number) {
     return  this.companyService.delete(id)
+  }
+
+  @Post('/upstat/:id')
+  updateStat(@Param('id')id:number,@Body('status')status:EPublished) {
+    return this.companyService.updateStatus(id,status)
   }
 }

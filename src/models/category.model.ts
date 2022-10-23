@@ -25,7 +25,7 @@ export class Category extends Model<Category> {
     @Column({ type: DataType.INTEGER, allowNull: true })
     bornFrom: number
 
-    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false })
+    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false ,defaultValue:'NO'})
     published: EPublished
 
     @Column({ type: DataType.ENUM('MOTHER','DOUGHTER'), allowNull: false })

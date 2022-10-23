@@ -1,13 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
+import { getNormObject } from "src/company/company.service";
+import { EPublished } from "src/models/case.model";
 import { Category } from "src/models/category.model";
+import { ECrudOperation } from "src/models/publications.model";
+import { ModeratorService } from "src/moderator/moderator.service";
 import { CategoryDto } from "./dto/category.dto";
 
 @Injectable()
 export class CategoryService{
     constructor(
         @InjectModel(Category)
-        private readonly categoryModal: typeof Category
+        private readonly categoryModal: typeof Category,
+        private readonly moderatorService:ModeratorService
     ){} 
 
     async getAll() {
@@ -29,7 +34,13 @@ export class CategoryService{
             throw new HttpException("Сategory already exists", HttpStatus.BAD_REQUEST)
         }
 
-        return this.categoryModal.create({...category})
+        const newCategory = await this.categoryModal.create({...category})
+        let sendJSON=getNormObject(newCategory)
+        delete sendJSON.id
+        const moderatable= await this.moderatorService.create(sendJSON,ECrudOperation.CREATE,'category',newCategory.id)
+        console.log(moderatable);
+
+        return 
     }
 
     async update(id: number, category: CategoryDto) {
@@ -60,5 +71,11 @@ export class CategoryService{
         })
 
         return lastCategory
+    }
+
+    async updateStatus(id: number,status:EPublished) {
+        const category= await this.categoryModal.findByPk(id) 
+        const newCategory = await category.update({published:status})
+        return newCategory
     }
 }

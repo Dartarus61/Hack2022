@@ -21,6 +21,7 @@ import { CommentModule } from './comment/comment.module';
 import { CompanyModule } from './company/company.module';
 import { MetatagsModule } from './metatags/metatags.module';
 import { SendfileModule } from './sendfile/sendfile.module';
+import { ModeratorModule } from './moderator/moderator.module';
 
 
 @Module({
@@ -55,7 +56,8 @@ import { SendfileModule } from './sendfile/sendfile.module';
         LocationModule,
         CommentModule,
         MetatagsModule,
-        SendfileModule
+        SendfileModule,
+        ModeratorModule
     ],
 })
 export class AppModule {}

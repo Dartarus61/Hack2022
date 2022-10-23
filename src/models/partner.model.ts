@@ -21,7 +21,7 @@ export class Partner extends Model<Partner> {
     @Column({ type: DataType.INTEGER, allowNull: false })
     queue: number
 
-    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false })
+    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false,defaultValue:'NO' })
     published: EPublished
 
     @ForeignKey(() => Company)

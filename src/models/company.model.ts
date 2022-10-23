@@ -1,6 +1,6 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript'
 import { AnotherEmail } from './anotherEmail.model'
-import { Case } from './case.model'
+import { Case, EPublished } from './case.model'
 import { Category } from './category.model'
 import { Comments } from './comment.model'
 import { Location } from './location.model'
@@ -66,6 +66,9 @@ export class Company extends Model<Company> {
 
     @Column({ type: DataType.STRING, allowNull: false })
     phoneNumber: string
+
+    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false,defaultValue:'NO' })
+    published: EPublished
 
     @HasMany(() => Partner)
     partners: Partner[]

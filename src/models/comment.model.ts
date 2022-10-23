@@ -37,7 +37,7 @@ export class Comments extends Model<Comments> {
     @Column({ type: DataType.STRING, allowNull: false })
     picture_dir: string
 
-    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false })
+    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false,defaultValue:'NO' })
     published: EPublished
 
     @ForeignKey(() => Company)

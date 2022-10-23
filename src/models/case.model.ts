@@ -37,7 +37,7 @@ export class Case extends Model<Case> {
     @Column({ type: DataType.STRING, allowNull: true })
     video_dir: string
 
-    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false })
+    @Column({ type: DataType.ENUM("YES",'NO','DENIED'), allowNull: false,defaultValue:'NO' })
     published: EPublished
 
     @Column({ type: DataType.DATE, allowNull: false })
