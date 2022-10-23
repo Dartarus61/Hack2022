@@ -14,29 +14,22 @@ export class ModeratorService {
     private mailService:MailService){}
 
     async create(data:JSON,CRUD_Oper:ECrudOperation,entity_name:string){
-            console.log(data);
             const bdata:Moderator=await this.moderatorModel.create({data,type_Crud:CRUD_Oper,entity_name,date:new Date})
-            console.log(bdata);
     }
 
     async updateStatus(status:EPublished,id:number,comment?:string) {
-        if (Object.values(EPublished).includes(status)) {
-            console.log(111);
-            
+        if (Object.values(EPublished).includes(status)) {            
         const resolveRequest = await this.moderatorModel.findByPk(id)
         if (!resolveRequest) throw new HttpException('Модерируемый объект не найден',HttpStatus.NOT_FOUND)
         await resolveRequest.update({published:status}) 
         if (status==EPublished.DENIED){
                await resolveRequest.update({comment})
         }
-        if (status==EPublished.YES){
+        if (status==EPublished.YES || status==EPublished.DENIED){
             let tmp=JSON.stringify(resolveRequest.data)
-            console.log(tmp);
             
-           this.mailService.SendNotification(resolveRequest.data.email,resolveRequest.entity_name)
+           this.mailService.SendNotification(resolveRequest.data.email,resolveRequest.entity_name,status)
          }
-         console.log(resolveRequest.entity_name);
-         console.log(resolveRequest.data.id);
         const { data } = await axios.post(
             `http://localhost:3000/${resolveRequest.entity_name}/upstat/${resolveRequest.data.id}`,
             { status },
@@ -47,9 +40,10 @@ export class ModeratorService {
               },
             },
           );
-
-        console.log(111);
-        
     }else throw new HttpException('Ошибка ввода данных',HttpStatus.BAD_REQUEST)}
     
 }
+
+
+
+

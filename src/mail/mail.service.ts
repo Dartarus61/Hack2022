@@ -1,12 +1,19 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { EPublished } from 'src/models/case.model';
 
 @Injectable()
 export class MailService {
     constructor(private readonly mailerService:MailerService){}
 
 
-    SendNotification(email:string,entity_name:string): void {
+    SendNotification(email:string,entity_name:string,verdict:EPublished): void {
+
+      enum entity {
+
+      }
+
+
         this.mailerService
           .sendMail({
             to: `${email}`, // list of receivers
@@ -21,7 +28,7 @@ export class MailService {
             <td style="border: 1px solid #000;">${entity_name}</td>
             </tr>
             <tr>
-            <td style="border: 1px solid #000; text-align: center; font-size: 16px; font-weight: 600;">Ваша переменная ${entity_name} была успешно опубликована</td>
+            <td style="border: 1px solid #000; text-align: center; font-size: 16px; font-weight: 600;">Your ${entity_name} already have verdict: ${verdict}</td>
             </tr>
             </table>`, // HTML body content
           })
