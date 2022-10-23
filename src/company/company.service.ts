@@ -14,6 +14,7 @@ import { ECrudOperation } from 'src/models/moderator.model';
 @Injectable()
 export class CompanyService {
     
+    
     constructor(
         @InjectModel(Company)
         private readonly companyModel: typeof Company,
@@ -137,6 +138,18 @@ export class CompanyService {
         const company= await this.companyModel.findByPk(id) 
         const newcompany = await company.update({published:status})
         return newcompany
+    }
+
+    async findByName(name: string) {
+        const company = await this.companyModel.findOne({where:{company_name:name},include:{all:true}})
+        if (company) return company
+        throw new HttpException('Компания не найдена',HttpStatus.NOT_FOUND)
+    }
+
+    async findByINN(inn: number) {
+        const company = await this.companyModel.findOne({where:{INN:inn},include:{all:true}})
+        if (company) return company
+        throw new HttpException('Компания не найдена',HttpStatus.NOT_FOUND)
     }
 }
 

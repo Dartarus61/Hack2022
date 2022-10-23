@@ -52,4 +52,14 @@ export class CompanyController {
   updateStat(@Param('id')id:number,@Body('status')status:EPublished) {
     return this.companyService.updateStatus(id,status)
   }
+
+  @Post('/findbyname')
+  findbyName(@Body('company_name')name: string) {
+    return this.companyService.findByName(name)
+  }
+
+  @Post('/findbyinn')
+  findByINN(@Body('inn')inn:number) {
+    return this.companyService.findByINN(inn)
+  }
 }

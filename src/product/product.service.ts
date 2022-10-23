@@ -11,6 +11,7 @@ import { CreateProductDto } from './dto/CreateProduct.dto';
 
 @Injectable()
 export class ProductService {
+    
     constructor(
         @InjectModel(Product)
         private readonly productModel: typeof Product,
@@ -124,5 +125,9 @@ export class ProductService {
         const product= await this.productModel.findByPk(id) 
         const newProduct = await product.update({published:status})
         return newProduct
+    }
+
+    async findByName(name: string) {
+       const product = await this.productModel.findOne({where:{name},include:{all:true}})
     }
 }

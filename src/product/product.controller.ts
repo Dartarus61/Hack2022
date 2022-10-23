@@ -44,5 +44,10 @@ export class ProductController {
     @Post('/upstat/:id')
     updateStat(@Param('id')id:number,@Body('status')status:EPublished) {
     return this.productService.updateStatus(id,status)
-  }
+    }
+
+    @Post('/findbyname')
+    findbyName(@Body('name')name: string) {
+        return this.productService.findByName(name)
+    }
 }
