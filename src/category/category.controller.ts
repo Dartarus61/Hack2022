@@ -38,5 +38,10 @@ export class CategoryController {
     @Post('/upstat/:id')
     updateStat(@Param('id')id:number,@Body('status')status:EPublished) {
     return this.categotyService.updateStatus(id,status)
-  }
+    }
+
+    @Get('/byname')
+    getOnebyName(@Body("name") name: string) {
+        return this.categotyService.getOnebyName(name)
+    }
 }

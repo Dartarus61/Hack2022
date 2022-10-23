@@ -12,7 +12,12 @@ export class CaseController {
       return this.caseService.getAll()
     }
   
-  
+    @Get()
+    getByName(@Body('name')name:string){
+      return this.caseService.findByName(name)
+    }
+
+
     @Get("/:id")
     getOne(@Param('id') id: number) {
       return this.caseService.getOne(id)
@@ -39,5 +44,10 @@ export class CaseController {
     @Delete("/delete/:id")
     delete(@Param('id') id: number) {
       return  this.caseService.delete(id)
+    }
+
+    @Get('/bycompany')
+    getByCompanyId(@Body('id')id:number){
+      return this.caseService.getByCompanyId(id)
     }
 }

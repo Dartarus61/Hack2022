@@ -9,6 +9,7 @@ import { CategoryDto } from "./dto/category.dto";
 
 @Injectable()
 export class CategoryService{
+    
     constructor(
         @InjectModel(Category)
         private readonly categoryModal: typeof Category,
@@ -61,7 +62,7 @@ export class CategoryService{
         const lastCategory = await this.categoryModal.findByPk(id)
 
         if(!lastCategory){
-            throw new HttpException("Category not found", HttpStatus.BAD_REQUEST)
+            throw new HttpException("Category not found", HttpStatus.NOT_FOUND)
         }
 
         await this.categoryModal.destroy({
@@ -77,5 +78,11 @@ export class CategoryService{
         const category= await this.categoryModal.findByPk(id) 
         const newCategory = await category.update({published:status})
         return newCategory
+    }
+
+    async getOnebyName(name: string) {
+        const category = await this.categoryModal.findOne({where:{name},include:{all:true}})
+        if (category) return category
+        throw new HttpException("Category not found", HttpStatus.NOT_FOUND)
     }
 }

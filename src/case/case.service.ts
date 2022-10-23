@@ -5,6 +5,8 @@ import { Case } from "src/models/case.model"
 import { CaseDto } from "./dto/case.dto";
 
 export class CaseService {
+    
+    
     constructor(
         @InjectModel(Case)
         private readonly caseModel: typeof Case,
@@ -88,4 +90,16 @@ export class CaseService {
         return lastCase
 
     }
+
+    async findByName(name: string) {
+        const Case = await this.caseModel.findOne({where:{name},include:{all:true}}) 
+        if (Case) return Case
+        throw new HttpException('Кейс не найден',HttpStatus.NOT_FOUND)
+    }
+
+    async getByCompanyId(id: number) {
+        const cases= await this.caseModel.findAll({where:{companyId:id}})
+        if (cases) return cases
+        throw new HttpException('Кейсы не найдены',HttpStatus.NOT_FOUND)
+      }
 }
